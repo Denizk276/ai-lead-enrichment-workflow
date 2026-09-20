@@ -16,7 +16,7 @@ Ein automatisierter n8n-Workflow, der eine Liste von Firmen recherchiert und mit
 
 - **n8n** (self-hosted via Docker/CasaOS) — Workflow-Engine
 - **Google Sheets API** — als Datenquelle und Ziel
-- **Groq API** (Llama 3.3 70B) — für die KI-Anreicherung, angebunden über die OpenAI-kompatible Schnittstelle
+- **Groq API** (openai/gpt-oss-20b) — für die KI-Anreicherung, angebunden über die OpenAI-kompatible Schnittstelle
 - **JavaScript** (n8n Code Node) — zum Parsen und Validieren der KI-Antworten
 
 ## Technische Herausforderungen & Lösungen
