@@ -1,0 +1,399 @@
+{
+  "name": "Google Sheets Projekt",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Du bekommst einen Firmennamen und eine Website. Antworte AUSSCHLIESSLICH mit validem JSON, keine Erklärung, kein Markdown, kein Text davor oder danach.\n\nFirmenname: {{ $json.Firmenname }}\nWebsite: {{ $json.Website }}\n\nGib zurück in exakt diesem Format:\n{\n  \"branche\": \"kurze Branchenbezeichnung\",\n  \"kurzprofil\": \"2 Sätze über die Firma\",\n  \"gespraechseinstieg\": \"ein personalisierter erster Satz für Kontaktaufnahme\"\n}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        144,
+        80
+      ],
+      "id": "819dd58c-55f8-48fb-8359-10143fe202b3",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-20b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        144,
+        256
+      ],
+      "id": "00cac15e-dfa3-48b4-8f6f-018d55d1f926",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "[DEINE-ID]",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -96,
+        64
+      ],
+      "id": "640ddace-f130-41cb-904f-8ae4fd84cae3",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        512,
+        272
+      ],
+      "id": "ec750c02-1cbd-4961-9e7e-31c1147504d8",
+      "name": "Wait",
+      "webhookId": "53d0fbbd-136e-47a6-a736-8d37058e0cc4"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1ghNZptgTuAWWVGMx2PdBQ3D2dbIdqcsJpDILw__1qKw",
+          "mode": "list",
+          "cachedResultName": "DeutscheFirmen",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ghNZptgTuAWWVGMx2PdBQ3D2dbIdqcsJpDILw__1qKw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1255819085,
+          "mode": "list",
+          "cachedResultName": "leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ghNZptgTuAWWVGMx2PdBQ3D2dbIdqcsJpDILw__1qKw/edit#gid=1255819085"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": 0,
+            "Branche": "={{ $json.Branche }}",
+            "Kurzprofil": "={{ $json.Kurzprofil }}",
+            "Gespraechseinstieg": "={{ $json.Gespraechseinstieg }}",
+            "Firmenname": "={{ $json.Firmenname }}",
+            "Status": "={{ $json.Status }}"
+          },
+          "matchingColumns": [
+            "Firmenname"
+          ],
+          "schema": [
+            {
+              "id": "Firmenname",
+              "displayName": "Firmenname",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Website",
+              "displayName": "Website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Branche",
+              "displayName": "Branche",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Kurzprofil",
+              "displayName": "Kurzprofil",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Gespraechseinstieg",
+              "displayName": "Gespraechseinstieg",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "output",
+              "displayName": "output",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1088,
+        80
+      ],
+      "id": "dd36e1fc-33fe-4b65-a2b8-85535a1bea03",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "[DEINE-ID]",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const parsed = JSON.parse($input.item.json.output);\n\nreturn {\n  json: {\n    Firmenname: $('Google Sheets').item.json.Firmenname,\n    branche: parsed.branche,\n    kurzprofil: parsed.kurzprofil,\n    gespraechseinstieg: parsed.gespraechseinstieg\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        608,
+        80
+      ],
+      "id": "323c23be-4110-4294-b54a-23b43fefaec2",
+      "name": "Configuration"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1ghNZptgTuAWWVGMx2PdBQ3D2dbIdqcsJpDILw__1qKw",
+          "mode": "list",
+          "cachedResultName": "DeutscheFirmen",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ghNZptgTuAWWVGMx2PdBQ3D2dbIdqcsJpDILw__1qKw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1255819085,
+          "mode": "list",
+          "cachedResultName": "leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ghNZptgTuAWWVGMx2PdBQ3D2dbIdqcsJpDILw__1qKw/edit#gid=1255819085"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        64
+      ],
+      "id": "339d44cc-e483-442f-9263-aa942764891e",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "[DEINE-ID]",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e2d39254-b2f7-43ff-80d5-4cb82bad2790",
+              "name": "Branche",
+              "value": "={{ $json.branche }}",
+              "type": "string"
+            },
+            {
+              "id": "60878e29-09f5-4124-92fd-f3c2396be817",
+              "name": "Kurzprofil",
+              "value": "={{ $json.kurzprofil }}",
+              "type": "string"
+            },
+            {
+              "id": "5fe89df1-3363-4872-bfb9-344dabcf3fb0",
+              "name": "Gespraechseinstieg",
+              "value": "={{ $json.gespraechseinstieg }}",
+              "type": "string"
+            },
+            {
+              "id": "f072d102-c1ae-493e-a6c6-3c16e93bb197",
+              "name": "Firmenname",
+              "value": "={{ $json.Firmenname }}",
+              "type": "string"
+            },
+            {
+              "id": "9e1a9d6c-96ee-41ee-a817-a23f5aac84ba",
+              "name": "Status",
+              "value": "Enriched",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        848,
+        80
+      ],
+      "id": "f7164e05-27e1-4166-be99-67aec88847f3",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Configuration",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Configuration": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet": {
+      "main": [
+        []
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "d1926adc-3ac7-4786-878f-db2a9cc98e6f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8e8ce601d16e5b7ffc4207f4ef482b198b204b6e87bea9ecce7d8dc99f4f1161"
+  },
+  "id": "jXVvYOMIMCWDHxDm",
+  "tags": []
+}
