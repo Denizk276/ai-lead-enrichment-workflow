@@ -1,21 +1,6 @@
 {
-  "name": "Google Sheets Projekt",
+  "name": "Google Sheets Projektv2",
   "nodes": [
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "=Du bekommst einen Firmennamen und eine Website. Antworte AUSSCHLIESSLICH mit validem JSON, keine Erklärung, kein Markdown, kein Text davor oder danach.\n\nFirmenname: {{ $json.Firmenname }}\nWebsite: {{ $json.Website }}\n\nGib zurück in exakt diesem Format:\n{\n  \"branche\": \"kurze Branchenbezeichnung\",\n  \"kurzprofil\": \"2 Sätze über die Firma\",\n  \"gespraechseinstieg\": \"ein personalisierter erster Satz für Kontaktaufnahme\"\n}",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 3.1,
-      "position": [
-        144,
-        80
-      ],
-      "id": "819dd58c-55f8-48fb-8359-10143fe202b3",
-      "name": "AI Agent"
-    },
     {
       "parameters": {
         "model": "openai/gpt-oss-20b",
@@ -24,10 +9,10 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
       "typeVersion": 1,
       "position": [
-        144,
-        256
+        1376,
+        272
       ],
-      "id": "00cac15e-dfa3-48b4-8f6f-018d55d1f926",
+      "id": "5d4ac0f7-74fe-44bb-872e-c91780c9af02",
       "name": "Groq Chat Model",
       "credentials": {
         "groqApi": {
@@ -43,23 +28,425 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        -96,
-        64
+        800,
+        80
       ],
-      "id": "640ddace-f130-41cb-904f-8ae4fd84cae3",
+      "id": "a2d8fdcf-fd71-455e-a08d-c63af5796d0d",
       "name": "Loop Over Items"
     },
     {
-      "parameters": {},
-      "type": "n8n-nodes-base.wait",
-      "typeVersion": 1.1,
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
       "position": [
-        512,
-        272
+        -640,
+        64
       ],
-      "id": "ec750c02-1cbd-4961-9e7e-31c1147504d8",
-      "name": "Wait",
-      "webhookId": "53d0fbbd-136e-47a6-a736-8d37058e0cc4"
+      "id": "a1837c83-5995-402d-9046-f60d83720611",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -640,
+        256
+      ],
+      "id": "a177cb38-1e1b-4210-a8a0-e381ffb0fa19",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1ghNZptgTuAWWVGMx2PdBQ3D2dbIdqcsJpDILw__1qKw",
+          "mode": "list",
+          "cachedResultName": "DeutscheFirmen",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ghNZptgTuAWWVGMx2PdBQ3D2dbIdqcsJpDILw__1qKw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1255819085,
+          "mode": "list",
+          "cachedResultName": "leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ghNZptgTuAWWVGMx2PdBQ3D2dbIdqcsJpDILw__1qKw/edit#gid=1255819085"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -320,
+        64
+      ],
+      "id": "67102ada-f9c4-4f78-8a94-b10b405831fc",
+      "name": "GetFirmen",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "[DEINE-ID]",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cb6e489e-2c74-47c0-98a4-a4da3e5d8c59",
+              "name": "Firmenname",
+              "value": "={{ $json.Firmenname }}",
+              "type": "string"
+            },
+            {
+              "id": "4ce7599d-63bb-466c-9ade-de96de100f41",
+              "name": "Website",
+              "value": "={{ $json.Website }}",
+              "type": "string"
+            },
+            {
+              "id": "d45ab2e4-f56f-479e-ad74-d62edb8895f0",
+              "name": "Status",
+              "value": "=Pending",
+              "type": "string"
+            },
+            {
+              "id": "f511d44d-73b4-4e53-8b2e-a62b22ab9089",
+              "name": "Branche",
+              "value": "={{ $json.Branche }}",
+              "type": "string"
+            },
+            {
+              "id": "6a599148-c8cb-4796-94e3-c67fc7a19e7b",
+              "name": "Kurzprofil",
+              "value": "={{ $json.Kurzprofil }}",
+              "type": "string"
+            },
+            {
+              "id": "f8112c8d-7e55-468d-8d5f-0f6b7d83126a",
+              "name": "Gespraechseinstieg",
+              "value": "={{ $json.Gespraechseinstieg }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        272,
+        -80
+      ],
+      "id": "9a3a09f7-71a0-4902-b6b9-1032f928cca4",
+      "name": "SetToPending"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d45ab2e4-f56f-479e-ad74-d62edb8895f0",
+              "name": "Status",
+              "value": "=Processing",
+              "type": "string"
+            },
+            {
+              "id": "cb6e489e-2c74-47c0-98a4-a4da3e5d8c59",
+              "name": "Firmenname",
+              "value": "={{ $json.Firmenname }}",
+              "type": "string"
+            },
+            {
+              "id": "4b135d56-3a2f-4579-8d6f-3fa97de176fa",
+              "name": "Website",
+              "value": "={{ $json.Website }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1008,
+        96
+      ],
+      "id": "b606225f-4512-4caf-a3a2-ea53580ada43",
+      "name": "SetToProcessing"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1ghNZptgTuAWWVGMx2PdBQ3D2dbIdqcsJpDILw__1qKw",
+          "mode": "list",
+          "cachedResultName": "DeutscheFirmen",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ghNZptgTuAWWVGMx2PdBQ3D2dbIdqcsJpDILw__1qKw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1255819085,
+          "mode": "list",
+          "cachedResultName": "leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ghNZptgTuAWWVGMx2PdBQ3D2dbIdqcsJpDILw__1qKw/edit#gid=1255819085"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Firmenname": "={{ $json.Firmenname }}",
+            "Status": "={{ $json.Status }}",
+            "Website": "={{ $json.Website }}",
+            "Branche": "={{ $json.Branche }}",
+            "Kurzprofil": "={{ $json.Kurzprofil }}",
+            "Gespraechseinstieg": "={{ $json.Gespraechseinstieg }}"
+          },
+          "matchingColumns": [
+            "Firmenname"
+          ],
+          "schema": [
+            {
+              "id": "Firmenname",
+              "displayName": "Firmenname",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Website",
+              "displayName": "Website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Branche",
+              "displayName": "Branche",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Kurzprofil",
+              "displayName": "Kurzprofil",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Gespraechseinstieg",
+              "displayName": "Gespraechseinstieg",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "output",
+              "displayName": "output",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        432,
+        -80
+      ],
+      "id": "f70ab60e-82aa-405d-9447-4e351d5535b4",
+      "name": "UpdateStatusToPending",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "[DEINE-ID]",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1ghNZptgTuAWWVGMx2PdBQ3D2dbIdqcsJpDILw__1qKw",
+          "mode": "list",
+          "cachedResultName": "DeutscheFirmen",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ghNZptgTuAWWVGMx2PdBQ3D2dbIdqcsJpDILw__1qKw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1255819085,
+          "mode": "list",
+          "cachedResultName": "leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ghNZptgTuAWWVGMx2PdBQ3D2dbIdqcsJpDILw__1qKw/edit#gid=1255819085"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Firmenname": "={{ $json.Firmenname }}",
+            "Status": "={{ $json.Status }}",
+            "Website": "={{ $json.Website }}"
+          },
+          "matchingColumns": [
+            "Firmenname"
+          ],
+          "schema": [
+            {
+              "id": "Firmenname",
+              "displayName": "Firmenname",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Website",
+              "displayName": "Website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Branche",
+              "displayName": "Branche",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Kurzprofil",
+              "displayName": "Kurzprofil",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Gespraechseinstieg",
+              "displayName": "Gespraechseinstieg",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "output",
+              "displayName": "output",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1184,
+        96
+      ],
+      "id": "c533abcf-b1e7-4a4f-9724-dffabdc85c08",
+      "name": "UpdateStatusToProcessing",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "[DEINE-ID]",
+          "name": "Google Sheets account"
+        }
+      }
     },
     {
       "parameters": {
@@ -179,11 +566,11 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        1088,
-        80
+        2016,
+        -32
       ],
-      "id": "dd36e1fc-33fe-4b65-a2b8-85535a1bea03",
-      "name": "Update row in sheet",
+      "id": "1990732b-bb8f-4551-ac81-6ba81510fafa",
+      "name": "LastUpdate",
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "[DEINE-ID]",
@@ -194,26 +581,99 @@
     {
       "parameters": {
         "mode": "runOnceForEachItem",
-        "jsCode": "const parsed = JSON.parse($input.item.json.output);\n\nreturn {\n  json: {\n    Firmenname: $('Google Sheets').item.json.Firmenname,\n    branche: parsed.branche,\n    kurzprofil: parsed.kurzprofil,\n    gespraechseinstieg: parsed.gespraechseinstieg\n  }\n};"
+        "jsCode": "const output = $json.output;\n\nif (!output) {\n  throw new Error(\"AI Agent hat kein Output zurückgegeben.\");\n}\n\nlet parsed;\n\ntry {\n  parsed = JSON.parse(output);\n} catch (error) {\n  throw new Error(\"AI Agent hat kein gültiges JSON zurückgegeben.\");\n}\n\nif (\n  !parsed.branche ||\n  !parsed.kurzprofil ||\n  !parsed.gespraechseinstieg\n) {\n  throw new Error(\"AI Output enthält nicht alle erforderlichen Felder.\");\n}\n\nreturn {\n  json: {\n    Firmenname: $('GetFirmen').item.json.Firmenname,\n    branche: parsed.branche,\n    kurzprofil: parsed.kurzprofil,\n    gespraechseinstieg: parsed.gespraechseinstieg\n  }\n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        608,
-        80
+        1680,
+        -16
       ],
-      "id": "323c23be-4110-4294-b54a-23b43fefaec2",
-      "name": "Configuration"
+      "id": "493c7145-5c3b-4788-9f1d-c484da5e9463",
+      "name": "SetColumns",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2416,
+        176
+      ],
+      "id": "6da36965-d8c1-4b11-9ec1-e8c74b230417",
+      "name": "Wait",
+      "webhookId": "f90323d2-818e-4860-be9b-df028977e140"
     },
     {
       "parameters": {
-        "pollTimes": {
-          "item": [
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
             {
-              "mode": "everyMinute"
+              "id": "e75443ef-caa5-4bc3-9cd5-a780364708cc",
+              "leftValue": "={{ $json.Status }}",
+              "rightValue": "=",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
             }
-          ]
+          ],
+          "combinator": "and"
         },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        112,
+        -80
+      ],
+      "id": "963d5573-dc4f-4574-a86d-29186113329c",
+      "name": "Status Empty"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "e75443ef-caa5-4bc3-9cd5-a780364708cc",
+              "leftValue": "={{ $json.Status }}",
+              "rightValue": "=Pending",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        624,
+        80
+      ],
+      "id": "56628bad-c024-4842-bde2-9ce702d660f7",
+      "name": "Status Pending"
+    },
+    {
+      "parameters": {
+        "operation": "update",
         "documentId": {
           "__rl": true,
           "value": "1ghNZptgTuAWWVGMx2PdBQ3D2dbIdqcsJpDILw__1qKw",
@@ -228,22 +688,195 @@
           "cachedResultName": "leads",
           "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ghNZptgTuAWWVGMx2PdBQ3D2dbIdqcsJpDILw__1qKw/edit#gid=1255819085"
         },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": 0,
+            "Branche": "={{ $json.Branche }}",
+            "Kurzprofil": "={{ $json.Kurzprofil }}",
+            "Gespraechseinstieg": "={{ $json.Gespraechseinstieg }}",
+            "Firmenname": "={{ $json.Firmenname }}",
+            "Status": "={{ $json.Status }}"
+          },
+          "matchingColumns": [
+            "Firmenname"
+          ],
+          "schema": [
+            {
+              "id": "Firmenname",
+              "displayName": "Firmenname",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Website",
+              "displayName": "Website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Branche",
+              "displayName": "Branche",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Kurzprofil",
+              "displayName": "Kurzprofil",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Gespraechseinstieg",
+              "displayName": "Gespraechseinstieg",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "output",
+              "displayName": "output",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
         "options": {}
       },
-      "type": "n8n-nodes-base.googleSheetsTrigger",
-      "typeVersion": 1,
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
       "position": [
-        -480,
-        64
+        2176,
+        176
       ],
-      "id": "339d44cc-e483-442f-9263-aa942764891e",
-      "name": "Google Sheets",
+      "id": "b22fe6c1-6279-4fba-a57c-17e4080ae7a4",
+      "name": "LastUpdate1 ERRORcase",
       "credentials": {
-        "googleSheetsTriggerOAuth2Api": {
+        "googleSheetsOAuth2Api": {
           "id": "[DEINE-ID]",
-          "name": "Google Sheets Trigger account"
+          "name": "Google Sheets account"
         }
       }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Du bekommst einen Firmennamen und eine Website. Antworte AUSSCHLIESSLICH mit validem JSON, keine Erklärung, kein Markdown, kein Text davor oder danach.\n\nFirmenname: {{ $json.Firmenname }}\nWebsite: {{ $json.Website }}\n\nGib zurück in exakt diesem Format:\n{\n  \"branche\": \"kurze Branchenbezeichnung\",\n  \"kurzprofil\": \"2 Sätze über die Firma\",\n  \"gespraechseinstieg\": \"ein personalisierter erster Satz für Kontaktaufnahme\"\n}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1376,
+        96
+      ],
+      "id": "1b3de9b8-ad2a-465b-bdf9-99b8118a5f87",
+      "name": "AI Agent",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "return {\n  json: {\n    Firmenname: $('GetFirmen').item.json.Firmenname,\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1856,
+        176
+      ],
+      "id": "e0e2de7f-64a7-4424-88dc-53421a44a3ef",
+      "name": "GetItemFirmenName"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e2d39254-b2f7-43ff-80d5-4cb82bad2790",
+              "name": "Branche",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "60878e29-09f5-4124-92fd-f3c2396be817",
+              "name": "Kurzprofil",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "5fe89df1-3363-4872-bfb9-344dabcf3fb0",
+              "name": "Gespraechseinstieg",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "f072d102-c1ae-493e-a6c6-3c16e93bb197",
+              "name": "Firmenname",
+              "value": "={{ $json.Firmenname }}",
+              "type": "string"
+            },
+            {
+              "id": "9e1a9d6c-96ee-41ee-a817-a23f5aac84ba",
+              "name": "Status",
+              "value": "Error",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2016,
+        176
+      ],
+      "id": "c7e03158-8fc8-473f-b3b6-1226e0e12526",
+      "name": "SetStatusToError"
     },
     {
       "parameters": {
@@ -286,11 +919,44 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        848,
-        80
+        1856,
+        -32
       ],
-      "id": "f7164e05-27e1-4166-be99-67aec88847f3",
-      "name": "Edit Fields"
+      "id": "917c72c8-5e35-4ed3-a60d-9b48a5e47be4",
+      "name": "SetStatusToEnriched"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b233c939-0e6b-4618-ae25-c2c5f149cff5",
+              "leftValue": "={{ $json.Status }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -64,
+        64
+      ],
+      "id": "d5d02053-e219-4c35-b1ac-5c69de5f62c6",
+      "name": "IfEmpty"
     }
   ],
   "pinData": {},
@@ -306,28 +972,107 @@
         ]
       ]
     },
-    "AI Agent": {
+    "Loop Over Items": {
       "main": [
+        [],
         [
           {
-            "node": "Wait",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Configuration",
+            "node": "SetToProcessing",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Loop Over Items": {
+    "Schedule Trigger": {
       "main": [
-        [],
         [
           {
-            "node": "AI Agent",
+            "node": "GetFirmen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "GetFirmen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetFirmen": {
+      "main": [
+        [
+          {
+            "node": "IfEmpty",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SetToPending": {
+      "main": [
+        [
+          {
+            "node": "UpdateStatusToPending",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SetToProcessing": {
+      "main": [
+        [
+          {
+            "node": "UpdateStatusToProcessing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UpdateStatusToPending": {
+      "main": [
+        [
+          {
+            "node": "Status Pending",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SetColumns": {
+      "main": [
+        [
+          {
+            "node": "SetStatusToEnriched",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "GetItemFirmenName",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LastUpdate": {
+      "main": [
+        [
+          {
+            "node": "Wait",
             "type": "main",
             "index": 0
           }
@@ -345,23 +1090,18 @@
         ]
       ]
     },
-    "Configuration": {
+    "Status Empty": {
       "main": [
         [
           {
-            "node": "Edit Fields",
+            "node": "SetToPending",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Update row in sheet": {
-      "main": [
-        []
-      ]
-    },
-    "Google Sheets": {
+    "Status Pending": {
       "main": [
         [
           {
@@ -372,11 +1112,91 @@
         ]
       ]
     },
-    "Edit Fields": {
+    "UpdateStatusToProcessing": {
       "main": [
         [
           {
-            "node": "Update row in sheet",
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LastUpdate1 ERRORcase": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "SetColumns",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "GetItemFirmenName",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetItemFirmenName": {
+      "main": [
+        [
+          {
+            "node": "SetStatusToError",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SetStatusToError": {
+      "main": [
+        [
+          {
+            "node": "LastUpdate1 ERRORcase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SetStatusToEnriched": {
+      "main": [
+        [
+          {
+            "node": "LastUpdate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IfEmpty": {
+      "main": [
+        [
+          {
+            "node": "Status Empty",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Status Pending",
             "type": "main",
             "index": 0
           }
@@ -389,11 +1209,11 @@
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "d1926adc-3ac7-4786-878f-db2a9cc98e6f",
+  "versionId": "90f00aa5-815b-44c8-b74c-21128bf8176e",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "8e8ce601d16e5b7ffc4207f4ef482b198b204b6e87bea9ecce7d8dc99f4f1161"
   },
-  "id": "jXVvYOMIMCWDHxDm",
+  "id": "VN0pQ9f3TChexUFG",
   "tags": []
 }
