@@ -18,7 +18,7 @@ Ein automatisierter n8n-Workflow, der eine Liste von Firmen recherchiert und mit
 
 - **n8n** (self-hosted via Docker/CasaOS) — Workflow-Engine
 - **n8n AI Agent Node** (LangChain-Integration) — für die strukturierte KI-Anreicherung
-- **Groq API** (Llama 3.3 / GPT-OSS 20B) — als LLM-Provider, angebunden über n8n's Chat-Model-Node
+- **Groq API** (GPT-OSS 20B) — als LLM-Provider, angebunden über n8n's Chat-Model-Node
 - **Google Sheets API** — als Datenquelle und Ziel, inklusive Status-Tracking
 - **JavaScript** (n8n Code Node) — zum Parsen und Validieren der KI-Antworten
 - **Schedule Trigger + Manual Trigger** — für flexible, wiederholbare Ausführung
