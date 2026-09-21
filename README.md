@@ -54,7 +54,7 @@ Dieses Muster macht den Workflow **idempotent**: bricht die Ausführung mittendr
 
 1. n8n-Instanz (Cloud oder self-hosted) mit aktivierten Google-Sheets- und Groq-Chat-Model-Credentials
 2. Groq API-Key unter [console.groq.com](https://console.groq.com)
-3. `workflow.json` in n8n importieren (Workflows → Import from File)
+3. `google-sheets-projekt.json` in n8n importieren (Workflows → Import from File)
 4. Eigenes Google Sheet mit den Spalten `Firmenname, Website, Status, Branche, Kurzprofil, Gespraechseinstieg` verbinden
 
 ## Weiterentwicklungsideen
